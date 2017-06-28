@@ -18,23 +18,24 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 package net.imagej;
 
 import java.io.IOException;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.table.AbstractTableModel;
 
-public class TableDataExportStudies extends AbstractTableModel{
+
+public class TableDataStudies extends AbstractTableModel{
 
 	private static final long serialVersionUID = 1L;
-	private String[] entetes = {"Patient name", "Patient ID", "Study date", "Study description", "Accession number", "ID"};
-	private final Class<?>[] columnClasses = new Class<?>[] {String.class, String.class, Date.class, String.class, String.class, String.class};
+	private String[] entetes = {"Study date", "Study description", "Accession number", "ID"};
+	private final Class<?>[] columnClasses = new Class<?>[] {Date.class, String.class, String.class, String.class};
 	private ArrayList<Study> studies = new ArrayList<Study>();
 	private ArrayList<String> ids = new ArrayList<String>();
 
-	public TableDataExportStudies(){
+	public TableDataStudies(){
 		super();
 	}
 
@@ -62,16 +63,12 @@ public class TableDataExportStudies extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return studies.get(rowIndex).getPatientName();
-		case 1:
-			return studies.get(rowIndex).getPatientID();
-		case 2:
 			return studies.get(rowIndex).getDate();
-		case 3:
+		case 1:
 			return studies.get(rowIndex).getStudyDescription();
-		case 4:
+		case 2:
 			return studies.get(rowIndex).getAccession();
-		case 5:
+		case 3:
 			return studies.get(rowIndex).getId();
 		default:
 			return null; //Ne devrait jamais arriver
@@ -84,7 +81,6 @@ public class TableDataExportStudies extends AbstractTableModel{
 
 	public void removeStudy(int rowIndex){
 		this.studies.remove(rowIndex);
-		this.ids.remove(rowIndex);
 		fireTableRowsDeleted(rowIndex, rowIndex);
 	}
 
@@ -92,18 +88,17 @@ public class TableDataExportStudies extends AbstractTableModel{
 	 * This method adds patient to the patients list, which will eventually be used by the JTable
 	 */
 	public void addStudy(String patientName, String patientID, String patientUID) throws IOException, ParseException{
+		ids.removeAll(ids);
 		DateFormat parser = new SimpleDateFormat("yyyyMMdd");
 		QueryFillStore queryID = new QueryFillStore("Studies", null, patientUID, null, null);
 		QueryFillStore queryDate = new QueryFillStore("Studies", null, patientUID, null, null);
 		QueryFillStore queryDescription = new QueryFillStore("Studies", null, patientUID, null, null);
 		QueryFillStore queryAccession = new QueryFillStore("Studies", null, patientUID, null, null);
-		QueryFillStore queryStudyInstanceUID = new QueryFillStore("Studies", null, patientUID, null, null);
-		
+
 		String[] id = queryID.extractData("id").split("SEPARATOR");
 		String[] description = new String[id.length];
 		String[] accession = new String[id.length];
 		Date[] date = new Date[id.length];
-		String[] studyInstanceUID = new String[id.length];
 
 		String[] descBrut = queryDescription.extractData("description").split("SEPARATOR");
 		for(int i = 0; i < descBrut.length; i++){
@@ -121,16 +116,11 @@ public class TableDataExportStudies extends AbstractTableModel{
 		for(int i = 0; i < accessionBrut.length; i++){
 			accession[i] = accessionBrut[i];
 		}
-		
-		String[] studyInstanceUIDBrut = queryStudyInstanceUID.extractData("studyInstanceUID").split("SEPARATOR");
-		for(int i = 0; i < studyInstanceUIDBrut.length; i++){
-			studyInstanceUID[i] = studyInstanceUIDBrut[i];
-		}
 
 		for(int i = 0; i < id.length; i++){
-			Study s = new Study(description[i], null, accession[i], id[i], null, patientName, patientID, studyInstanceUID[i]);
+			Study s = new Study(description[i], null, accession[i], id[i], null, patientName, patientID, null);
 			if(date[i]!=null){
-				s = new Study(description[i], date[i], accession[i], id[i], null, patientName, patientID, studyInstanceUID[i]);
+				s = new Study(description[i], date[i], accession[i], id[i], null, patientName, patientID, null);
 			}
 			if(!this.studies.contains(s)){
 				this.studies.add(s);
@@ -140,11 +130,7 @@ public class TableDataExportStudies extends AbstractTableModel{
 		}
 	}
 
-	public void clearIdsList(){
-		this.ids.removeAll(ids);
-	}
-	
-	public ArrayList<String> getOrthancIds(){
+	public ArrayList<String> getIds(){
 		return this.ids;
 	}
 
