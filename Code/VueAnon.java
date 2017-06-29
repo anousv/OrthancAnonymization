@@ -2135,9 +2135,9 @@ public class VueAnon extends JFrame implements PlugIn{
 					if(dialogResult == JOptionPane.YES_OPTION){
 						state.setText("<html><font color='green'>The data has successfully been anonymized.</font></html>");
 						tabbedPane.setSelectedIndex(1);
+						modeleAnonPatients.clear();
+						modeleAnonStudies.empty();
 					}
-					modeleAnonPatients.clear();
-					modeleAnonStudies.empty();
 					if(tableauExportStudies.getRowCount() > 0){
 						tableauExportStudies.setRowSelectionInterval(tableauExportStudies.getRowCount() - 1, tableauExportStudies.getRowCount() - 1);
 					}
@@ -2158,7 +2158,6 @@ public class VueAnon extends JFrame implements PlugIn{
 					worker.execute();
 				}
 			}
-//			dialogResult = JOptionPane.YES_OPTION;
 		}
 	}
 
