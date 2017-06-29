@@ -96,8 +96,6 @@ public class CSV {
 			PrintWriter pw = new PrintWriter(f);
 			pw.write(content.toString());
 			pw.close();
-			System.out.println("DONE");
-			System.out.println(this.content.toString());
 		}
 	}
 	

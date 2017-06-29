@@ -123,6 +123,7 @@ public class VueAnon extends JFrame implements PlugIn{
 	private ArrayList<String> zipContent = new ArrayList<String>();
 	private JPanel anonTablesPanel;
 	private int anonCount;
+	private ArrayList<String> newIDs = new ArrayList<String>();
 
 	// Tab Export (p2)
 	private JLabel stateExports = new JLabel("");
@@ -1930,6 +1931,7 @@ public class VueAnon extends JFrame implements PlugIn{
 		int dialogResult = JOptionPane.YES_OPTION;
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			dialogResult = JOptionPane.YES_OPTION;
 			anonCount = 0;
 			SwingWorker<Void,Void> workerRemoveScAndSr = new SwingWorker<Void,Void>(){
 				@Override
@@ -2053,6 +2055,26 @@ public class VueAnon extends JFrame implements PlugIn{
 											"Warning anonymizing US",
 											JOptionPane.WARNING_MESSAGE);
 						}
+						
+						// Checking if several anonymized patients have the same ID or not
+						boolean[] similarIDs = {false};
+						for(int n = 0; n < anonPatientTable.getRowCount(); n++){
+							String newID = modeleAnonPatients.getPatient(anonPatientTable.convertRowIndexToModel(n)).getNewID();
+							if(newID != "" && !newIDs.contains(newID)){
+								newIDs.add(newID);
+							}else if(newIDs.contains(newID)){
+								similarIDs[0] = true;
+							}
+						}
+						if(similarIDs[0]){
+							dialogResult = JOptionPane.showConfirmDialog (null, 
+									"You have defined 2 or more identical IDs for anonymized patients, which is not recommended."
+											+ " Are you sure you want to anonymize ?",
+											"Warning similar IDs",
+											JOptionPane.WARNING_MESSAGE,
+											JOptionPane.YES_NO_OPTION);
+						}
+						
 						if(dialogResult == JOptionPane.YES_OPTION){
 
 							String substituteName = "A-" + jprefer.get("centerCode", "12345");
@@ -2110,14 +2132,18 @@ public class VueAnon extends JFrame implements PlugIn{
 					addToAnon.setEnabled(true);
 					removeFromAnonList.setEnabled(true);
 					anonBtn.setText("Anonymize");
-					state.setText("<html><font color='green'>The data has successfully been anonymized.</font></html>");
-					tabbedPane.setSelectedIndex(1);
+					if(dialogResult == JOptionPane.YES_OPTION){
+						state.setText("<html><font color='green'>The data has successfully been anonymized.</font></html>");
+						tabbedPane.setSelectedIndex(1);
+					}
 					modeleAnonPatients.clear();
 					modeleAnonStudies.empty();
-					tableauExportStudies.setRowSelectionInterval(tableauExportStudies.getRowCount() - 1, tableauExportStudies.getRowCount() - 1);
+					if(tableauExportStudies.getRowCount() > 0){
+						tableauExportStudies.setRowSelectionInterval(tableauExportStudies.getRowCount() - 1, tableauExportStudies.getRowCount() - 1);
+					}
 					modeleExportSeries.clear();
 					try {
-						if(modeleExportStudies.getRowCount() != 0){
+						if(modeleExportStudies.getRowCount() > 0){
 							String studyID = (String)tableauExportStudies.getValueAt(tableauExportStudies.getSelectedRow(), 5);
 							modeleExportSeries.addSerie(studyID);
 							tableauExportSeries.setRowSelectionInterval(0,0);
@@ -2132,6 +2158,7 @@ public class VueAnon extends JFrame implements PlugIn{
 					worker.execute();
 				}
 			}
+//			dialogResult = JOptionPane.YES_OPTION;
 		}
 	}
 

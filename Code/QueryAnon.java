@@ -181,7 +181,6 @@ public class QueryAnon {
 				this.query = "{" + replace.toString() + keep.toString() + "}";
 			}
 		}
-//		System.out.println("[QueryAnon] query : "+this.query);
 	}
 
 	public void deleteSerie() throws IOException{
@@ -230,7 +229,6 @@ public class QueryAnon {
 		String pattern2 = "\",";
 		Pattern p = Pattern.compile(Pattern.quote(pattern1) + "(.*?)" + Pattern.quote(pattern2));
 		Matcher m = p.matcher(sb.toString());
-		System.out.println(sb.toString());
 		while(m.find()){
 			this.newUID = m.group(1);
 		}

@@ -95,7 +95,6 @@ public class ConvertZipAction{
 				authentication = Base64.getEncoder().encodeToString((jpreferPerso.get("username", null) + ":" + jpreferPerso.get("password", null)).getBytes());
 			}
 		}
-		System.out.println("[ConvertZipAction] path" +setupPath);
 		this.setupPath = setupPath;
 		this.zipContent = zipContent;
 		this.temporary[0] = temporary;
@@ -164,7 +163,6 @@ public class ConvertZipAction{
 				f = new File(setupPath + File.separator + df.format(new Date()) + ".zip");
 			}
 		}
-		System.out.println("setup path " +this.setupPath);
 		if(setupPath == null){
 			this.choix[0] = this.fileChooser();
 			f = new File(path + File.separator + df.format(new Date()) + ".zip");
