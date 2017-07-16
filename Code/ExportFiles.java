@@ -67,15 +67,6 @@ public class ExportFiles {
 		}
 		this.remoteFileName = remoteFileName;
 		this.serverAdress = serverAdress;
-//		if(chosenOption.equals(OPTION_FTP)){
-//			String[] separe = this.serverAdress.split(":");
-//			StringBuilder testB= new StringBuilder();
-//			for(int i = 0; i<separe.length - 1; i++){
-//				testB.append(separe[i]);
-//			}
-//			this.serverAdress = testB.toString();
-//			this.port = Integer.parseInt(separe[separe.length - 1]);
-//		}
 		this.port = port;
 		this.login = login;
 		this.pwd = pwd;

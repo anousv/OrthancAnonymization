@@ -81,7 +81,7 @@ public class DeleteActionMainPanel extends AbstractAction{
 		}else{
 			this.ip = jpreferPerso.get("ip", "http://localhost");
 			this.port = jpreferPerso.get("port", "8042");
-			if(jpreferPerso.get("username", null) != null && jpreferPerso.get("username", null) != null){
+			if(jpreferPerso.get("username", null) != null && jpreferPerso.get("password", null) != null){
 				authentication = Base64.getEncoder().encodeToString((jpreferPerso.get("username", null) + ":" + jpreferPerso.get("password", null)).getBytes());
 			}
 		}

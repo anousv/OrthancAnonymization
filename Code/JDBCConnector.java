@@ -41,16 +41,10 @@ public class JDBCConnector {
 				jprefer.get("dbUsername", null) != null && jprefer.get("dbPassword", null) != null){
 			connection = DriverManager.getConnection("jdbc:mysql://" + jprefer.get("dbAdress", null) + ":" 
 				+ jprefer.get("dbPort", null)  + "/" + jprefer.get("dbName", null), jprefer.get("dbUsername", null), jprefer.get("dbPassword", null));
-			if (connection != null) {
-				System.out.println("[JDBCConnector] DB connected");
-			} else {
-				System.out.println("[JDBCConnector] Failed to make connection!");
-			}
 		}
 	}
 
 	public void disconnect() throws SQLException{
-		System.out.println("[JDBCConnector] DB disconnected");
 		connection.close();
 	}
 
