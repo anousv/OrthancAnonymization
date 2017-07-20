@@ -176,9 +176,9 @@ public class QueryAnon {
 				keep.deleteCharAt(keep.toString().length() - 1);
 			}keep.append("]");
 			if(this.privateTags.equals(Choice.KEEP)){
-				this.query = "{" + replace.toString() + keep.toString() + ",\"KeepPrivateTags\": null" + "}";
+				this.query = "{" + replace.toString() + keep.toString() + ",\"KeepPrivateTags\": true" + ",\"Force\": true" + "}";
 			}else{
-				this.query = "{" + replace.toString() + keep.toString() + "}";
+				this.query = "{" + replace.toString() + keep.toString() + ",\"Force\": true" + "}";
 			}
 		}
 	}
